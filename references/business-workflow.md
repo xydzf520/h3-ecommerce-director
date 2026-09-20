@@ -89,7 +89,7 @@ python scripts/reference_frames.py --input "$H3_CAMPAIGN/inputs/references/refer
 
 每个镜头在计划中对应 `shot_id`、生成项目/段号、参考区间、对白、预期剪辑区间、交付文件和验收重点；连续组补充 `continuity_group`、顺序、前段依赖与 `continuous/cut`。这些是 Agent 的生产记录，脚本不自动解析成依赖队列。
 
-视频默认走本地 H3。已有合格母版直接复用；确需图片生成/编辑时选择当前可用工具，可选 [ToAPIs Gemini](image-fallback.md)。使用图片服务后仍要核对商品、人物和清晰度。
+可直接使用 Codex 当前可用的图片生成工具制作商品、人物、场景参考图和分镜图，先检查商品身份、人物、构图与清晰度，再作为视频生成依据。已有合格母版直接复用；图片能力由 Codex 运行环境提供，也可选 [ToAPIs Gemini](image-fallback.md)。视频默认交给本地 H3，整个 Skill 负责组织这条制作工作流。
 
 扫描已有工作流，按 [storyboard 格式](storyboard-schema.md) 编写 `storyboard.json` 与六段式 `prompts/seg_01.txt`。这是 Agent 的制作产物，构建器不会直接把任意需求文档变成分镜。
 

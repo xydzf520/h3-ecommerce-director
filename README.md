@@ -1,10 +1,10 @@
 # H3 Ecommerce Director
 
-**用本地 MiniMax H3 / ComfyUI 制作抖音电商投流素材的 Agent Skill。**
+**由 Codex 驱动的抖音电商素材制作工作流，以 Agent Skill 形式使用。**
 
-提供商品图、参考视频和文案，由 Agent 组织分析、分镜、生成、检查与返修，交付视频和素材清单。
+导入商品图、参考视频和文案，直接在 Codex 中生成高质量参考图与分镜，再由本地 MiniMax H3 / ComfyUI 生成视频。先做好商品、人物与构图，再衔接分段生成、审片和返修，提升整条素材的质量与一致性。
 
-**状态：已投入实际生产。维护者反馈，1–2 分钟素材质量很高。** 已通过 34 项离线测试及 Linux / Python 3.11–3.14 CI；新环境需先试产代表镜头。
+**状态：已投入实际生产。维护者主观体验：1–2 分钟素材质量很高，整体效果优于 SD 2.5。** 已通过 34 项离线测试及 Linux / Python 3.11–3.14 CI；新环境需先试产代表镜头。
 
 [下载](https://github.com/xydzf520/h3-ecommerce-director/releases/latest) · [完整使用流程](references/business-workflow.md) · [CI](https://github.com/xydzf520/h3-ecommerce-director/actions/workflows/tests.yml)
 
@@ -20,6 +20,7 @@
 
 | 常见问题 | 核心做法 |
 |---|---|
+| **参考图质量差、分镜与商品表达脱节** | 用 Codex 生成并检查高质量参考图与分镜，从源头控制商品、人物和构图质量 |
 | **长素材接不上，越接越糊** | 用前段实际采用的尾帧续接；固定高清人物/商品参考图，逐段检查动作、声音和清晰度；返修后重查相关接点 |
 | **商品换样、变大变小、像贴图** | 对照真实 SKU 检查包装、结构、尺度、受光和遮挡，覆盖转动与切镜过程 |
 | **复刻丢动作，人物表演僵硬** | 按参考事件设计动作和说听关系，先验证完整互动，再扩展整组素材 |
@@ -34,6 +35,7 @@
 | 方面 | 原版 | 本版 |
 |---|---|---|
 | 定位 | 通用剧本 → 分镜 → 成片 | 抖音电商素材、参考复刻、商品替换 |
+| 制作准备 | 剧本分镜、角色四视图参考 | 用 Codex 制作电商所需的商品/人物/场景参考图与分镜，先检查再生成视频 |
 | 长素材 | 已有段级生成与镜头衔接 | 细化真实尾帧接续、画质退化、商品/声音一致性及依赖返修 |
 | 工程 | 工作流构建、提交与监控基础 | 修正图片条件绑定，增加未知任务核对、下载独立恢复、审片证据校验 |
 | 运行与交付 | Windows / 剪映导向 | Linux 本地生产，默认独立 MP4 与交付清单；可选第三方图片 API |
@@ -44,7 +46,7 @@
 
 ### 1. 准备环境
 
-需要 **Linux、Python 3.11+、ffmpeg/ffprobe、支持 Skill 的 Agent**。实际生成还需已安装并运行的 **ComfyUI + H3 节点与模型**。
+需要 **Linux、Python 3.11+、ffmpeg/ffprobe、Codex 或兼容 Skill 的 Agent**。实际生成还需已安装并运行的 **ComfyUI + H3 节点与模型**。
 
 ```bash
 git clone https://github.com/xydzf520/h3-ecommerce-director.git
@@ -55,22 +57,22 @@ python -m pip install -r requirements.txt
 python scripts/runtime_check.py --offline
 ```
 
-将仓库放入 Agent 的 Skill 目录，或让 Agent 读取本仓库的 `SKILL.md`。默认 ComfyUI 地址为 `http://127.0.0.1:8188`；工作区配置见 [配置样例](examples/pipeline-config.example.json)。上述命令安装依赖并检查环境，不会启动视频生成。
+将仓库放入 Agent 的 Skill 目录，或让 Codex 读取本仓库的 `SKILL.md`。默认 ComfyUI 地址为 `http://127.0.0.1:8188`；工作区配置见 [配置样例](examples/pipeline-config.example.json)。上述命令安装依赖并检查环境，不会启动视频生成。
 
-### 2. 准备资源，交给 Agent
+### 2. 准备资源，交给 Codex
 
 提供 **商品图路径、参考片及区间、文案、保留/可改项、时长与画幅**。可填写 [需求模板](examples/production-brief.example.md)，然后发送：
 
-> 使用 $h3-ecommerce-director，按完整业务流程制作抖音投流素材。商品图在【路径】，参考视频在【路径】，使用【起止时间】，文案见【文件】。目标约 90 秒、9:16，只替换商品，保留人物和关键动作。先导入资源并试产代表镜头，通过后继续分段生成；检查接点、商品、声音与清晰度，交付独立视频和清单。
+> 使用 $h3-ecommerce-director，制作抖音投流素材。商品图在【路径】，参考片在【路径】，使用【起止时间】，文案见【文件】。目标约 90 秒、9:16，只换商品，保留人物和关键动作。先用 Codex 制作并检查所需参考图和分镜，再用本地 H3 试产、分段生成；检查接点、商品、声音与清晰度，交付视频和清单。
 
-**流程：资源导入 → 参考分析 → 母版/分镜 → 试产 → 分段生成 → 审片返修 → 交付。**
+**流程：资源导入 → 参考分析 → Codex 生图与分镜 → 本地 H3 试产与分段生成 → 审片返修 → 交付。**
 
 资源目录、实际生成命令、连续段组织和中断恢复，按 [完整业务流程](references/business-workflow.md) 执行。
 
 ## 当前范围
 
 - **视频**：默认本地生成，单任务 5–15 秒；长素材由多段组织。内置 I2V 仅首帧，需要尾帧约束时使用兼容的自定义工作流。
-- **图片**：可选 ToAPIs Gemini API，需自行配置凭据，调用时会外发相关素材。[配置说明](references/image-fallback.md)
+- **图片与分镜**：使用 Codex 当前可用的图片生成工具制作参考图、分镜图；图片能力由运行环境提供。也可选 ToAPIs Gemini API，需配置凭据，调用时会外发相关素材。[配置说明](references/image-fallback.md)
 - **交付**：包含任务脚本和检查工具；自动剪辑器、双 ASR、飞书及工作台后台未随包提供。
 
 更多细节：[分段长视频](references/segment-continuity.md) · [画质保持](references/sharpness-quality.md) · [验收与返修](references/delivery-contract.md)
