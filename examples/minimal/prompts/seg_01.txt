@@ -1,0 +1,12 @@
+subject_definitions:
+A fictional unbranded blue ceramic cup, with one intact handle, resting on a neutral table. No person, logo or readable text.
+summary:
+A five-second vertical product study in soft daylight.
+retention_analysis:
+Keep cup geometry, handle position and blue glaze consistent throughout.
+detailed_description:
+[Shot 1] At 00:00-00:05, the camera makes a small controlled lateral move around the stationary cup. Show the rim, handle and grounded contact shadow; the cup remains the same size and shape. No cuts or additional objects.
+overall_soundscape:
+No dialogue. Quiet scene; no sound claims are part of this offline example.
+non_diegetic_music:
+None.

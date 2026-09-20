@@ -1,0 +1,19 @@
+{
+  "meta": {
+    "request_id": "demo-cup",
+    "revision": "v1",
+    "prompt_mode": "official",
+    "strict_prompt_validation": true,
+    "aspect": "9:16 (Portrait Widescreen)",
+    "default_steps": 4,
+    "default_seed": 42,
+    "megapixels": 0.4
+  },
+  "segments": [
+    {
+      "id": 1,
+      "duration": 5,
+      "mode": "t2v"
+    }
+  ]
+}

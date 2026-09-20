@@ -1,0 +1,4 @@
+interface:
+  display_name: "H3 电商素材导演"
+  short_description: "基于本地 H3 制作电商素材，控制商品、角色、动作一致性并记录验收证据"
+  default_prompt: "使用 $h3-ecommerce-director 读取我的需求、商品图和参考视频，检查本地环境，确定保留与可改项，试产代表镜头后交付独立素材和验收清单。"

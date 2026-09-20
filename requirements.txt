@@ -1,0 +1,3 @@
+# Optional image client and contact-sheet tools. Core ComfyUI pipeline uses stdlib.
+requests>=2.32.3,<3
+Pillow>=10.4,<13

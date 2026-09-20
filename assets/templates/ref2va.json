@@ -1,0 +1,275 @@
+{
+  "115": {
+    "inputs": {
+      "aspect_ratio": "9:16 (Portrait Widescreen)",
+      "megapixels": 0.4,
+      "multiple": 32
+    },
+    "class_type": "ResolutionSelector"
+  },
+  "119": {
+    "inputs": {
+      "vae_name": "minimax_h3_video_vae_fp16.safetensors"
+    },
+    "class_type": "VAELoader"
+  },
+  "120": {
+    "inputs": {
+      "vae_name": "minimax_h3_audio_vae_fp32.safetensors"
+    },
+    "class_type": "VAELoader"
+  },
+  "123": {
+    "inputs": {
+      "sampler_name": "res_multistep"
+    },
+    "class_type": "KSamplerSelect"
+  },
+  "124": {
+    "inputs": {
+      "scheduler": "simple",
+      "steps": 4,
+      "denoise": 1,
+      "model": [
+        "191",
+        0
+      ]
+    },
+    "class_type": "BasicScheduler"
+  },
+  "125": {
+    "inputs": {
+      "noise": [
+        "129",
+        0
+      ],
+      "guider": [
+        "126",
+        0
+      ],
+      "sampler": [
+        "123",
+        0
+      ],
+      "sigmas": [
+        "124",
+        0
+      ],
+      "latent_image": [
+        "136",
+        1
+      ]
+    },
+    "class_type": "SamplerCustomAdvanced"
+  },
+  "126": {
+    "inputs": {
+      "model": [
+        "191",
+        0
+      ],
+      "conditioning": [
+        "136",
+        0
+      ]
+    },
+    "class_type": "BasicGuider"
+  },
+  "127": {
+    "inputs": {
+      "unet_name": "minimax_h3_ref2va_pruned_int8_convrot.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "UNETLoader"
+  },
+  "128": {
+    "inputs": {
+      "clip_name": "qwen3vl_32b_minimax_h3_int8_convrot.safetensors",
+      "type": "minimax",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader"
+  },
+  "129": {
+    "inputs": {
+      "noise_seed": 339451577219864
+    },
+    "class_type": "RandomNoise"
+  },
+  "131": {
+    "inputs": {
+      "expression": "max(5, round(a * 24)) + (5 - (max(5, round(a * 24)) % 17)) % 17",
+      "values.a": [
+        "132",
+        0
+      ]
+    },
+    "class_type": "ComfyMathExpression"
+  },
+  "132": {
+    "inputs": {
+      "value": 5
+    },
+    "class_type": "PrimitiveFloat"
+  },
+  "136": {
+    "inputs": {
+      "prompt": [
+        "138",
+        0
+      ],
+      "width": [
+        "115",
+        0
+      ],
+      "height": [
+        "115",
+        1
+      ],
+      "length": [
+        "131",
+        1
+      ],
+      "ref_image_size": "match",
+      "clip": [
+        "128",
+        0
+      ],
+      "vae": [
+        "119",
+        0
+      ],
+      "audio_vae": [
+        "120",
+        0
+      ],
+      "ref_images.ref_image_0": [
+        "137",
+        0
+      ],
+      "ref_images.ref_image_1": [
+        "139",
+        0
+      ]
+    },
+    "class_type": "MiniMaxH3ReferenceToVideo"
+  },
+  "137": {
+    "inputs": {
+      "image": "product_reference_1.png"
+    },
+    "class_type": "LoadImage"
+  },
+  "138": {
+    "inputs": {
+      "value": "Example product scene. Build with the project prompt before submission."
+    },
+    "class_type": "PrimitiveStringMultiline"
+  },
+  "139": {
+    "inputs": {
+      "image": "product_reference_2.png"
+    },
+    "class_type": "LoadImage"
+  },
+  "149": {
+    "inputs": {
+      "samples": [
+        "125",
+        0
+      ],
+      "vae": [
+        "119",
+        0
+      ]
+    },
+    "class_type": "VAEDecode"
+  },
+  "150": {
+    "inputs": {
+      "samples": [
+        "125",
+        0
+      ],
+      "vae": [
+        "120",
+        0
+      ]
+    },
+    "class_type": "VAEDecodeAudio"
+  },
+  "151": {
+    "inputs": {
+      "fps": 24,
+      "bit_depth": 8,
+      "images": [
+        "149",
+        0
+      ],
+      "audio": [
+        "150",
+        0
+      ]
+    },
+    "class_type": "CreateVideo"
+  },
+  "152": {
+    "inputs": {
+      "filename_prefix": "h3-ecommerce/example",
+      "format": "auto",
+      "codec": "auto",
+      "video": [
+        "151",
+        0
+      ]
+    },
+    "class_type": "SaveVideo"
+  },
+  "157": {
+    "inputs": {
+      "sage_attention": "auto",
+      "allow_compile": false,
+      "model": [
+        "192",
+        0
+      ]
+    },
+    "class_type": "PathchSageAttentionKJ"
+  },
+  "164": {
+    "inputs": {
+      "enable_fp16_accumulation": false,
+      "model": [
+        "157",
+        0
+      ]
+    },
+    "class_type": "ModelPatchTorchSettings"
+  },
+  "191": {
+    "inputs": {
+      "processing_control_value": 0.08,
+      "processing_percent_1": 0.1,
+      "processing_percent_2": 0.9,
+      "mcs": 2,
+      "device": "auto",
+      "mode": "4-step LoRA",
+      "model": [
+        "164",
+        0
+      ]
+    },
+    "class_type": "TESpeedMiniMaxH3"
+  },
+  "192": {
+    "inputs": {
+      "lora_name": "minimax_h3_turbo_v4_step600_ema.safetensors",
+      "strength_model": 0.75,
+      "model": [
+        "127",
+        0
+      ]
+    },
+    "class_type": "LoraLoaderBypassModelOnly"
+  }
+}

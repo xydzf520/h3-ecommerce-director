@@ -1,0 +1,42 @@
+{
+  "request_id": "demo-cup",
+  "revision": "v1",
+  "has_reference_video": false,
+  "unresolved_feedback": [
+    "Complete actual observation before release"
+  ],
+  "clips": [
+    {
+      "file": "materials/clip.mp4",
+      "sha256": "example-sha-replace-with-actual-file-hash",
+      "prompt_id": "example-task-id"
+    }
+  ],
+  "full_preview": {
+    "path": "review/full.mp4",
+    "sha256": "example-sha-replace-with-actual-file-hash"
+  },
+  "roles_reviewed": [],
+  "checks": {
+    "reference_fidelity": {
+      "status": "needs_review",
+      "observations": "",
+      "evidence": []
+    },
+    "pacing_and_continuity": {
+      "status": "needs_review",
+      "observations": "",
+      "evidence": []
+    },
+    "performance": {
+      "status": "needs_review",
+      "observations": "",
+      "evidence": []
+    },
+    "dialogue_and_quality": {
+      "status": "needs_review",
+      "observations": "",
+      "evidence": []
+    }
+  }
+}

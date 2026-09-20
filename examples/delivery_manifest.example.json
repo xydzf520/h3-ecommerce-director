@@ -1,0 +1,14 @@
+{
+  "items": [
+    {
+      "request_id": "demo-cup",
+      "revision": "v1",
+      "sequence": 1,
+      "file": "materials/clip.mp4",
+      "sha256": "example-sha-replace-with-actual-file-hash",
+      "prompt_id": "example-task-id",
+      "production_status": "needs_review",
+      "human_review": "pending"
+    }
+  ]
+}
